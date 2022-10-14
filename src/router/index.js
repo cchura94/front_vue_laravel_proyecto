@@ -25,11 +25,19 @@ const router = createRouter({
       path: '/admin',
       name: 'Admin',
       component: App,
+      meta: {
+        requireAuth: true
+      },
       children: [
         {
           path: '',
           name: 'dashboard',
           component: () => import('../components/Dashboard.vue')
+        },
+        {
+          path: 'perfil',
+          name: 'Perfil',
+          component: () => import('../views/admin/Perfil.vue')
         },
 
       ]
@@ -37,7 +45,10 @@ const router = createRouter({
     {
       path: '/login',
       name: 'login',
-      component: () => import('../views/auth/Login.vue')
+      component: () => import('../views/auth/Login.vue'),
+      meta: {
+        redirectIfAuth: true
+      }
     },
     {
       path: '/error',
@@ -56,5 +67,27 @@ const router = createRouter({
     }
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  console.log("TO: ", to)
+
+  let token = localStorage.getItem("access_token");
+  
+  if(to.meta.requireAuth){
+    if(!token)
+      next({name: 'login'})
+    
+    next();    
+
+  }
+
+  if(to.meta.redirectIfAuth && token){
+    next({name: 'Admin'})
+  }
+
+  return next();
+
+});
+
 
 export default router

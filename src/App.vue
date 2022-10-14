@@ -35,10 +35,12 @@ export default {
             mobileMenuActive: false,
             menu : [
                 {
-                    label: 'Home',
+                    label: 'Admin',
                     items: [{
-                        label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/'
-                    }]
+                        label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/admin',
+                    },
+                    {label: 'Perfil', icon: 'pi pi-fw pi-id-card', to: '/admin/perfil'},
+                    ]
                 },
 				{
 					label: 'UI Components', icon: 'pi pi-fw pi-sitemap',
