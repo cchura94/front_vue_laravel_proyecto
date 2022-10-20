@@ -44,6 +44,28 @@ const router = createRouter({
           name: 'Usuario',
           component: () => import('../views/admin/Usuario.vue')
         },
+        {
+          path: 'categoria',
+          name: 'Categoria',
+          component: () => import('../views/admin/categoria/Categoria.vue'),
+          children: [
+            {
+              path: '',
+              name: 'ListaCategoria',
+              component: () => import('../views/admin/categoria/ListaCategoria.vue')
+            },
+            {
+              path: 'nuevo',
+              name: 'NuevaCategoria',
+              component: () => import('../views/admin/categoria/NuevaCategoria.vue')
+            },
+            {
+              path: ':id/editar',
+              name: 'EditarCategoria',
+              component: () => import('../views/admin/categoria/EditarCategoria.vue')
+            }
+          ]
+        }
 
       ]
     },
