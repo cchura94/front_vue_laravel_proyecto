@@ -65,6 +65,11 @@ const router = createRouter({
               component: () => import('../views/admin/categoria/EditarCategoria.vue')
             }
           ]
+        },
+        {
+          path: 'producto',
+          name: 'Producto',
+          component: () => import('../views/admin/Producto.vue'),
         }
 
       ]

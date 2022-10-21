@@ -27,7 +27,7 @@
                         label="Modificar Categoria"
                         icon="pi pi-plus"
                         class="mr-2"
-                        @click="guardarCategoria"
+                        @click="modificarCategoria"
                     />
                 </div>
             </div>
@@ -68,14 +68,14 @@ export default {
             }
         }
 
-        const guardarCategoria = async () => {
-
+        const modificarCategoria = async () => {
+cargando.value =true 
             try{
-                const {data} = await categoriaService.sendCategoria(categoria.value);
+                const {data} = await categoriaService.updateCategoria(categoria.value.id, categoria.value);
 
                 router.push({name: 'ListaCategoria'})
-
-            }catch(err){
+cargando.value = false
+            }catch(error){
                 console.log(error)
             }
             
@@ -83,7 +83,7 @@ export default {
 
         return {
             categoria,
-            guardarCategoria,
+            modificarCategoria,
             cargando
         }
     }

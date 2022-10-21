@@ -1,6 +1,7 @@
 import axios from "axios"
 
-export const urlBase = "http://127.0.0.1:8000/api";
+// export const urlBase = "http://127.0.0.1:8000/api";
+export const urlBase = "https://back-productos.herokuapp.com/api";
 
 export const http = () => {
 
