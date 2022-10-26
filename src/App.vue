@@ -83,7 +83,7 @@ export default {
                     items: [
                         {label: 'Nuevo Pedido', icon: 'pi pi-fw pi-eye', to: '/blocks', badge: "NEW"},
                         {label: 'Lista Pedidos ', icon: 'pi pi-fw pi-globe', url: 'https://www.primefaces.org/primeblocks-vue', target: '_blank'},
-                        {label: 'Clientes', icon: 'pi pi-fw pi-prime', to: '/icons'},
+                        {label: 'Clientes', icon: 'pi pi-fw pi-prime', to: '/admin/cliente'},
                     ]
                 },
                 

@@ -70,6 +70,11 @@ const router = createRouter({
           path: 'producto',
           name: 'Producto',
           component: () => import('../views/admin/Producto.vue'),
+        },
+        {
+          path: 'cliente',
+          name: 'Cliente',
+          component: () => import('../views/admin/Cliente.vue'),
         }
 
       ]

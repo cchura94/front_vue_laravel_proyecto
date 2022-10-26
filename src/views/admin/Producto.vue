@@ -1,5 +1,6 @@
 <template>
   <div class="card">
+    <h1>{{ storeContador.contador }}</h1>
     <Toolbar class="mb-4">
       <template #start>
         <Button
@@ -225,9 +226,12 @@ import { FilterMatchMode } from "primevue/api";
 import productService from "@/service/ProductoService.js";
 import categoriaService from "@/service/CategoriaService.js";
 import { useToast } from "primevue/usetoast";
+import { useContadorStore } from "@/stores/contador.js"
 
+    
 export default {
   setup() {
+    const storeContador = useContadorStore()
     const selectedProducts = ref();
     const deleteProductDialog = ref(false);
     const deleteProductsDialog = ref(false);
@@ -380,7 +384,8 @@ export default {
       editProduct,
       totalRecords,
       loading,
-      onPage
+      onPage,
+      storeContador
     };
   },
 };
