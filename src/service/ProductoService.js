@@ -19,4 +19,8 @@ export default {
     deleteProducto(id){
         return http().delete(`/producto/${id}`);
     },
+
+    subirImagenProducto(id, formdata){
+        return http().post(`/producto/${id}/subir-imagen`, formdata)
+    }
 }

@@ -81,20 +81,20 @@
         field="id"
         header="ID"
         :sortable="true"
-        style="min-width: 12rem"
+        style="min-width: 1rem"
       ></Column>
       <Column
         field="nombre"
         header="Nombre"
         :sortable="true"
-        style="min-width: 16rem"
+        style="min-width: 12rem"
       ></Column>
       <Column header="Image">
         <template #body="slotProps">
           <img
-            src="https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png"
+            :src="`${urlBaseAsset}/${slotProps.data.imagen}`"
             :alt="slotProps.data.image"
-            class="product-image"
+            class="product-image-1"
           />
         </template>
       </Column>
@@ -102,7 +102,7 @@
         field="precio"
         header="Precio"
         :sortable="true"
-        style="min-width: 8rem"
+        style="min-width: 4rem"
       >
         <template #body="slotProps">
           {{ formatCurrency(slotProps.data.precio) }}
@@ -116,6 +116,9 @@
       ></Column>
       <Column :exportable="false" style="min-width: 8rem">
         <template #body="slotProps">
+          <h5>Modal</h5>
+        <Button icon="pi pi-image" @click="openModalImagen(slotProps.data)" />
+
           <Button
             icon="pi pi-pencil"
             class="p-button-rounded p-button-success mr-2"
@@ -138,6 +141,7 @@
     :modal="true"
     class="p-fluid"
   >
+  
     <img
       src="https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png"
       :alt="product.image"
@@ -218,6 +222,27 @@
       />
     </template>
   </Dialog>
+
+  <Dialog header="Header" v-model:visible="displayModalImagen" :breakpoints="{'960px': '75vw', '640px': '90vw'}" :style="{width: '50vw'}" :modal="true">
+            
+
+            <FileUpload name="demo[]" :customUpload="true" @uploader="subirImagen" :multiple="false" accept="image/*" :maxFileSize="1000000">
+              <!--template #content>
+                  <ul v-if="uploadedFiles && uploadedFiles[0]">
+                      <li v-for="file of uploadedFiles[0]" :key="file">{{ file.name }} - {{ file.size }} bytes</li>
+                  </ul>
+              </template>
+              <template #empty>
+                  <p>Drag and drop files to here to upload.</p>
+              </template-->
+          </FileUpload>
+          <input type="file" @change="onImagenSeleccionado">
+
+
+            <template #footer>
+                <Button label="Cerrar" icon="pi pi-times" @click="closeModal" class="p-button-text"/>
+            </template>
+        </Dialog>
 </template>
 
 <script>
@@ -227,9 +252,12 @@ import productService from "@/service/ProductoService.js";
 import categoriaService from "@/service/CategoriaService.js";
 import { useToast } from "primevue/usetoast";
 import { useContadorStore } from "@/stores/contador.js"
-
+import { urlBaseAsset } from "@/service/Http.js"
     
 export default {
+  data(){
+    return {urlBaseAsset}
+  },
   setup() {
     const storeContador = useContadorStore()
     const selectedProducts = ref();
@@ -242,9 +270,14 @@ export default {
     const products = ref();
     const totalRecords = ref()
     const loading = ref(false)
+    const displayModalImagen = ref(false)
+    const producto_id = ref(null)
+    const uploadedFiles = ref([]);
 
     const categorias = ref([]);
     const lazyParams = ref({});
+
+    const files = ref([]);
 
     const toast = useToast();
 
@@ -322,6 +355,35 @@ export default {
       }
     };
 
+    const onAdvancedUpload = (event) => {
+      console.log(uploadedFiles)
+
+    }
+
+    const onImagenSeleccionado = (event) => {
+      console.log(event.target.files)
+
+    }
+
+    const onSelectedFiles = (event) => {
+            files.value = event.files;
+            console.log(files.value[0])
+            
+            /*
+            files.value.forEach((file) => {
+                totalSize.value += parseInt(this.formatSize(file.size));
+            });
+            */
+      }
+    const subirImagen = async (event) => {
+      console.log(event.files[0])
+      let formdata = new FormData();
+      formdata.append("imagen", event.files[0])
+      
+      const {data} = await productService.subirImagenProducto(producto_id.value, formdata)
+      listarProductos()
+    }
+
     const loadLazyData = () => {
             loading.value = true;
 
@@ -355,6 +417,11 @@ export default {
       productDialog.value = true;
     };
 
+    const openModalImagen = (prod) => {
+      displayModalImagen.value = true
+      producto_id.value = prod.id
+    }
+
     const formatCurrency = (value) => {
       if (value)
         return value.toLocaleString("en-US", {
@@ -385,8 +452,22 @@ export default {
       totalRecords,
       loading,
       onPage,
-      storeContador
+      storeContador,
+      displayModalImagen,
+      openModalImagen,
+      onAdvancedUpload,
+      uploadedFiles,
+      onImagenSeleccionado,
+      onSelectedFiles,
+      subirImagen
     };
   },
 };
 </script>
+
+<style scoped>
+.product-image-1{
+  width: 80px;
+  height: 70px;
+}
+</style>
